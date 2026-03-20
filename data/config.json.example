@@ -1,0 +1,10 @@
+{
+    "telegram_token": "YOUR_BOT_TOKEN_HERE",
+    "ollama_url": "http://ollama:11434",
+    "ollama_model": "llama3",
+    "schedule_start": "08:00",
+    "schedule_end": "22:00",
+    "schedule_interval_minutes": 30,
+    "allowed_chat_ids": [],
+    "db_path": "/app/data/conversations.db"
+}

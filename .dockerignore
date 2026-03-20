@@ -1,0 +1,11 @@
+build/
+.git/
+.gitignore
+data/
+*.db
+*.o
+*.a
+README.md
+docker-compose.yml
+ollama.Dockerfile
+.dockerignore

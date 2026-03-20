@@ -1,0 +1,33 @@
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: ollama.Dockerfile
+    # Para GPU NVIDIA, descomentar as linhas abaixo:
+    # deploy:
+       resources:
+         reservations:
+           devices:
+             - driver: nvidia
+               count: all
+               capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11434/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+    environment:
+      - CONFIG_PATH=/app/data/config.json
+    restart: unless-stopped
