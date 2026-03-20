@@ -4,11 +4,11 @@ FROM ollama/ollama:latest
 RUN apt-get update && apt-get install -y --no-install-recommends curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Bake the LLM model into the image at build time
-# Start ollama in the background, pull the model, then stop
+# Bake a LIGHTWEIGHT model optimized for CPU
+# phi3:mini (~2.3GB) is much faster than llama3 (~4.7GB) on CPU
 RUN ollama serve & \
     SERVER_PID=$! && \
     sleep 10 && \
-    ollama pull llama3 && \
+    ollama pull phi3:mini && \
     kill $SERVER_PID && \
     wait $SERVER_PID 2>/dev/null || true

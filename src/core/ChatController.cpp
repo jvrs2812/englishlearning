@@ -70,7 +70,7 @@ void ChatController::handleMessage(int64_t chatId, const std::string& username, 
         store_->saveMessage(chatId, userMsg);
 
         // 2. Get conversation history
-        auto history = store_->getHistory(chatId, 40);
+        auto history = store_->getHistory(chatId, 15);
 
         // 3. Build the full conversation with system prompt
         auto conversation = promptBuilder_.buildConversation(history);

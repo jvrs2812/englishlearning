@@ -53,6 +53,13 @@ std::string OllamaService::chat(const std::vector<Message>& conversation) {
     requestBody["model"] = model_;
     requestBody["stream"] = false;
 
+    // Optimize for speed on CPU
+    json options;
+    options["num_predict"] = 300;    // Max tokens to generate (keeps response concise)
+    options["temperature"] = 0.7;
+    options["num_ctx"] = 2048;       // Smaller context window = faster on CPU
+    requestBody["options"] = options;
+
     json messages = json::array();
     for (const auto& msg : conversation) {
         json m;

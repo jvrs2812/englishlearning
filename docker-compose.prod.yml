@@ -1,0 +1,40 @@
+# ==============================================
+# English Buddy Bot — Production Docker Compose
+# ==============================================
+# Uses pre-built images from GitHub Container Registry.
+#
+# Usage:
+#   1. Copy this file to your production server
+#   2. Create a data/ directory with your config.json
+#   3. Login to GHCR: docker login ghcr.io -u YOUR_GITHUB_USER
+#   4. Run: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  ollama:
+    image: ghcr.io/jvrs2812/englishlearning/ollama:latest
+    # Para GPU NVIDIA, descomentar:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11434/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  app:
+    image: ghcr.io/jvrs2812/englishlearning/app:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+    environment:
+      - CONFIG_PATH=/app/data/config.json
+    restart: unless-stopped

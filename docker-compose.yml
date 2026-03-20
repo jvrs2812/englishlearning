@@ -5,12 +5,12 @@ services:
       dockerfile: ollama.Dockerfile
     # Para GPU NVIDIA, descomentar as linhas abaixo:
     # deploy:
-       resources:
-         reservations:
-           devices:
-             - driver: nvidia
-               count: all
-               capabilities: [gpu]
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://localhost:11434/"]
       interval: 10s
